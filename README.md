@@ -105,6 +105,38 @@ Jika VM tujuan masuk ke UEFI shell, bootloader fallback belum ada.
 
 **Urutan disk**: disk pertama di OVA adalah disk boot sesuai `boot: order=` (atau `bootdisk:` pada config lama), sisanya diurutkan per bus. Urutan ditampilkan sebagai `Disk order: disk1=..., disk2=...` saat export.
 
+### Contoh lengkap VM UEFI
+
+```bash
+# --- Di host sumber ---
+# 1. (Linux guest) pastikan bootloader fallback ada, dari dalam VM 100:
+#    grub-install --target=x86_64-efi --efi-directory=/boot/efi --removable
+#    ls /boot/efi/EFI/BOOT/BOOTX64.EFI
+qm shutdown 100
+qm config 100 | grep -E '^(bios|efidisk0|boot):'   # bios: ovmf
+
+# 2. Export; output menampilkan "UEFI" dan perintah qm set untuk tujuan
+python3 proxmox_ova_exporter.py 100 --name debian13-uefi
+# -> output/debian13-uefi-100.ova
+
+# 3. Salin OVA ke host tujuan
+scp output/debian13-uefi-100.ova root@<host-tujuan>:/root/
+
+# --- Di host tujuan ---
+mkdir -p /root/ova-import && cd /root/ova-import
+tar -xf /root/debian13-uefi-100.ova
+qm importovf 200 debian13-uefi.ovf local-lvm
+
+# 4. Aktifkan UEFI + EFI disk baru, NIC, dan boot order
+qm set 200 --bios ovmf --efidisk0 local-lvm:1,efitype=4m,pre-enrolled-keys=0
+qm set 200 --net0 virtio,bridge=vmbr0
+qm set 200 --boot order=scsi0
+qm config 200
+qm start 200
+```
+
+Gunakan `pre-enrolled-keys=1` hanya jika VM sumber memakai Secure Boot. Script mencetak nilai yang sesuai di akhir export.
+
 ## Keterbatasan
 
 - Ini bukan proses live export; VM sumber harus berhenti.
