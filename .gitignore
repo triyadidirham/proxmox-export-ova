@@ -1,0 +1,5 @@
+# Hasil export OVA dan file kerja
+output/
+
+__pycache__/
+*.pyc
