@@ -22,27 +22,27 @@ python3 /root/proxmox_ova_exporter.py --help
 
 ```bash
 # 1. Export standar (nama dari qm config)
-qm shutdown 102
-qm status 102
-python3 /root/proxmox_ova_exporter.py 102
+qm shutdown 100
+qm status 100
+python3 /root/proxmox_ova_exporter.py 100
 
 # 2. Nama file sendiri dan teks deskripsi OS
-python3 /root/proxmox_ova_exporter.py 102 \
+python3 /root/proxmox_ova_exporter.py 100 \
   --name debian13-base --os 'Debian 13' \
   --output /root/debian13-base-v1.0.ova
 
 # 3. Memakai VMDK standalone streamOptimized yang sudah ada
-python3 /root/proxmox_ova_exporter.py 102 \
-  --disk /root/radius-appliance-disk1.vmdk \
-  --output /root/radius-appliance-v1.0.ova
+python3 /root/proxmox_ova_exporter.py 100 \
+  --disk /root/my-appliance-disk1.vmdk \
+  --output /root/my-appliance-v1.0.ova
 
 # 4. VMDK lebih dari satu (urutan harus sesuai disk guest)
-python3 /root/proxmox_ova_exporter.py 105 \
+python3 /root/proxmox_ova_exporter.py 100 \
   --disk /root/os.vmdk --disk /root/data.vmdk \
-  --output /root/vm105-v1.0.ova
+  --output /root/vm100-v1.0.ova
 
 # 5. Debug: simpan disk/OVF sementara
-python3 /root/proxmox_ova_exporter.py 102 --keep-workdir
+python3 /root/proxmox_ova_exporter.py 100 --keep-workdir
 ```
 
 **Parameter `--os` opsional:** hanya menambahkan deskripsi di OVF; bukan pendeteksi OS, bukan installer, dan bukan pemilih driver. Default-nya `Other 64-bit`.

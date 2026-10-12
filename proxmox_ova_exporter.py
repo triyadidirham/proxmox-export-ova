@@ -113,7 +113,7 @@ def main():
         prog='proxmox_ova_exporter.py',
         description='Export VM Proxmox yang sudah berhenti menjadi satu paket OVA (OVF + VMDK).',
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""PERSYARATAN:
+        epilog=r"""PERSYARATAN:
   * Jalankan sebagai root pada host Proxmox VE (tersedia qm, pvesm, qemu-img).
   * VM harus stopped; siapkan ruang disk untuk VMDK sementara + OVA.
   * Bersihkan password/token, identitas unik, IP statis sebelum distribusi.
@@ -122,25 +122,25 @@ CONTOH:
   # Bantuan lengkap
   python3 proxmox_ova_exporter.py --help
 
-  # Export VM 102, otomatis membaca nama, CPU, RAM, disk dari Proxmox
-  python3 proxmox_ova_exporter.py 102
+  # Export VM 100, otomatis membaca nama, CPU, RAM, disk dari Proxmox
+  python3 proxmox_ova_exporter.py 100
 
   # Nama custom + lokasi output + deskripsi OS (opsional)
-  python3 proxmox_ova_exporter.py 102 --name debian13-base \
+  python3 proxmox_ova_exporter.py 100 --name debian13-base \
     --os 'Debian 13' --output /root/debian13-base-v1.0.ova
 
   # Gunakan VMDK streamOptimized yang sudah dikonversi; tanpa konversi ulang
-  python3 proxmox_ova_exporter.py 102 \
-    --disk /root/radius-appliance-disk1.vmdk \
-    --output /root/radius-appliance-v1.0.ova
+  python3 proxmox_ova_exporter.py 100 \
+    --disk /root/my-appliance-disk1.vmdk \
+    --output /root/my-appliance-v1.0.ova
 
   # Multi-disk: ulangi --disk sesuai urutan disk guest
-  python3 proxmox_ova_exporter.py 105 \
+  python3 proxmox_ova_exporter.py 100 \
     --disk /root/os.vmdk --disk /root/data.vmdk \
     --output /root/appliance-multidisk.ova
 
   # Tanpa manifest; simpan file kerja untuk pemeriksaan
-  python3 proxmox_ova_exporter.py 102 --no-manifest --keep-workdir
+  python3 proxmox_ova_exporter.py 100 --no-manifest --keep-workdir
 
 SETELAH EXPORT:
   tar -tf /root/debian13-base-v1.0.ova
